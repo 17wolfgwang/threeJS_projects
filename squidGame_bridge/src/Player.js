@@ -44,8 +44,9 @@ export class Player extends Stuff {
       this.actions[0] = cm1.mixer.clipAction(this.modelMesh.animations[0]); // default
       this.actions[1] = cm1.mixer.clipAction(this.modelMesh.animations[1]); // fall
       this.actions[2] = cm1.mixer.clipAction(this.modelMesh.animations[2]); // jump
+      this.actions[2].repetitions = 1;
 
-      this.actions[2].play();
+      this.actions[0].play();
     });
   }
 }

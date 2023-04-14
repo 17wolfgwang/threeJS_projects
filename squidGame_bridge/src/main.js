@@ -160,19 +160,25 @@ const bar4 = new Bar({
   y: 10.3,
   z: 0,
 });
+
+const sideLights = [];
 for (let i = 0; i < 49; i++) {
-  new SideLight({
-    name: "sideLight",
-    container: bar1.mesh,
-    z: i * 0.5 - glassUnitSize * 10,
-  });
+  sideLights.push(
+    new SideLight({
+      name: "sideLight",
+      container: bar1.mesh,
+      z: i * 0.5 - glassUnitSize * 10,
+    })
+  );
 }
 for (let i = 0; i < 49; i++) {
-  new SideLight({
-    name: "sideLight",
-    container: bar4.mesh,
-    z: i * 0.5 - glassUnitSize * 10,
-  });
+  sideLights.push(
+    new SideLight({
+      name: "sideLight",
+      container: bar4.mesh,
+      z: i * 0.5 - glassUnitSize * 10,
+    })
+  );
 }
 
 //유리판
@@ -223,7 +229,7 @@ const player = new Player({
   z: 13,
   rotationY: Math.PI,
   cannonMaterial: cm1.playerMaterial,
-  mass: 2,
+  mass: 10,
 });
 objects.push(player);
 
@@ -242,20 +248,36 @@ function checkIntersects() {
   }
 }
 
+let fail = false;
+let jumping = false;
 function checkClickedObject(mesh) {
   if (mesh.name.indexOf("glass") >= 0) {
     //유리판 클릭 시
+    if (jumping || fail) return;
     if (mesh.step - 1 === cm2.step) {
+      player.actions[2].stop();
+      player.actions[2].play();
+      jumping = true;
       cm2.step++;
 
       switch (mesh.type) {
         case "normal":
-          console.log("normal");
+          const timerId = setTimeout(() => {
+            fail = true;
+            player.actions[0].stop();
+            player.actions[1].play();
+            sideLights.forEach((item) => {
+              item.turnOff();
+            });
+          }, 700);
           break;
         case "strong":
-          console.log("strong");
           break;
       }
+
+      const timerId = setTimeout(() => {
+        jumping = false;
+      }, 1000);
 
       gsap.to(player.cannonBody.position, {
         duration: 1,
@@ -281,14 +303,21 @@ function draw() {
   cm1.world.step(1 / 60, delta, 3);
   objects.forEach((item) => {
     if (item.cannonBody) {
-      item.mesh.position.copy(item.cannonBody.position);
-      item.mesh.quaternion.copy(item.cannonBody.quaternion);
-      if (item.modelMesh) {
-        item.modelMesh.position.copy(item.cannonBody.position);
-        item.modelMesh.quaternion.copy(item.cannonBody.quaternion);
+      if (item.name === "player") {
+        item.mesh.position.copy(item.cannonBody.position);
+        if (fail) item.mesh.quaternion.copy(item.cannonBody.quaternion);
+        if (item.modelMesh) {
+          item.modelMesh.position.copy(item.cannonBody.position);
+          if (fail) item.modelMesh.quaternion.copy(item.cannonBody.quaternion);
+        }
+        item.modelMesh.position.y += 0.15;
+      } else {
+        item.mesh.position.copy(item.cannonBody.position);
+        item.mesh.quaternion.copy(item.cannonBody.quaternion);
 
-        if (item.name === "player") {
-          item.modelMesh.position.y += 0.15;
+        if (item.modelMesh) {
+          item.modelMesh.position.copy(item.cannonBody.position);
+          item.modelMesh.quaternion.copy(item.cannonBody.quaternion);
         }
       }
     }
