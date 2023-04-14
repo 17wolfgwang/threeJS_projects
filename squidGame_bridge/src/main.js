@@ -34,10 +34,15 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   1000
 );
+const camera2 = camera.clone();
 camera.position.x = -4;
 camera.position.y = 19;
 camera.position.z = 14;
-cm1.scene.add(camera);
+
+camera2.position.y = 0;
+camera2.lookAt(0, 1, 0);
+
+cm1.scene.add(camera, camera2);
 
 // Light
 const ambientLight = new THREE.AmbientLight(cm2.lightColor, 0.8);
@@ -250,6 +255,7 @@ function checkIntersects() {
 
 let fail = false;
 let jumping = false;
+let onReplay = false;
 function checkClickedObject(mesh) {
   if (mesh.name.indexOf("glass") >= 0) {
     //유리판 클릭 시
@@ -269,6 +275,15 @@ function checkClickedObject(mesh) {
             sideLights.forEach((item) => {
               item.turnOff();
             });
+
+            setTimeout(() => {
+              onReplay = true;
+              //다시 player 보여주는 연출
+              player.cannonBody.position.y = 9;
+              setTimeout(() => {
+                onReplay = false;
+              }, 3000);
+            }, 1000);
           }, 700);
           break;
         case "strong":
@@ -342,7 +357,14 @@ function draw() {
 
   controls.update();
 
-  renderer.render(cm1.scene, camera);
+  if (!onReplay) {
+    renderer.render(cm1.scene, camera);
+  } else {
+    renderer.render(cm1.scene, camera2);
+    camera2.position.x = player.cannonBody.position.x;
+    camera2.position.y = player.cannonBody.position.y - 1;
+    camera2.position.z = player.cannonBody.position.z;
+  }
   renderer.setAnimationLoop(draw);
 }
 
