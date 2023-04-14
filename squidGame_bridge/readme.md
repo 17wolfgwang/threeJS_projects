@@ -65,6 +65,16 @@ I have always had interest in threeJS. I believe that 3D graphics using threeJS 
 [![threeJS][threejs.com]][threejs-url]
 [![threeJS][gsap.com]][gsap-url]
 
+### How to start?
+
+Follow below command
+</br>
+npm i -D @babel/cli @babel/core @babel/preset-env babel-loader clean-webpack-plugin copy-webpack-plugin core-js cross-env html-webpack-plugin source-map-loader terser-webpack-plugin webpack webpack-cli webpack-dev-server
+</br>
+npm i three
+</br>
+npm start
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- GETTING STARTED -->
@@ -131,9 +141,3 @@ Project Link: [https://github.com/17wolfgwang/threeJS_projects](https://github.c
 [gsap-url]: https://greensock.com/gsap/
 
 ---
-
-## npm i -D @babel/cli @babel/core @babel/preset-env babel-loader clean-webpack-plugin copy-webpack-plugin core-js cross-env html-webpack-plugin source-map-loader terser-webpack-plugin webpack webpack-cli webpack-dev-server
-
-## npm i three
-
-## npm start
