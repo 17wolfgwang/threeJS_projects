@@ -1,15 +1,22 @@
 import { Scene, BoxGeometry, MeshPhongMaterial, SphereGeometry } from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { World, Material } from "cannon-es";
 
 export const cm1 = {
-  canvas: document.querySelector("#three-canvas"),
   scene: new Scene(),
   gltfLoader: new GLTFLoader(),
   //JS는 객체를 생성하면 알아서 입력해줘서 할 필요는 없다. 공통사용이 뭐가 있는지 알게하기 위한 코드
   mixer: undefined,
+
+  //cannon
+  world: new World(),
+  defaultMaterial: new Material("default"),
+  glassMaterial: new Material("glass"),
+  playerMaterial: new Material("player"),
 };
 
 export const cm2 = {
+  step: 0,
   backgroundColor: "#3e1322",
   lightColor: "#ffe9ac",
   pillarColor: "#071d28",

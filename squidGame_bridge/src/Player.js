@@ -13,8 +13,12 @@ export class Player extends Stuff {
     //부모 클래스(Stuff) 호출하겠다는 뜻
     super(info);
 
+    this.width = 0.5;
+    this.height = 1.2;
+    this.depth = 0.5;
+
     this.mesh = new Mesh(
-      new BoxGeometry(0.5, 0.5, 0.5),
+      new BoxGeometry(this.width, this.height, this.depth),
       new MeshBasicMaterial({ transparent: true, opacity: 0 })
     );
     this.mesh.castShadow = true;
@@ -31,6 +35,8 @@ export class Player extends Stuff {
       );
       this.modelMesh.castShadow = true;
       cm1.scene.add(this.modelMesh);
+
+      this.setCannonBody();
 
       this.modelMesh.animations = glb.animations;
       cm1.mixer = new AnimationMixer(this.modelMesh);
