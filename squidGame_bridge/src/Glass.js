@@ -1,6 +1,6 @@
 import { Mesh } from "three";
 import { Stuff } from "./Stuff";
-import { cm1, geo, mat } from "./common";
+import { cm1, geo, mat, sounds } from "./common";
 
 export class Glass extends Stuff {
   constructor(info) {
@@ -9,6 +9,7 @@ export class Glass extends Stuff {
 
     this.type = info.type;
     this.step = info.step;
+    this.sound = sounds[this.type];
 
     this.geometry = geo.glass;
     switch (this.type) {
@@ -37,5 +38,16 @@ export class Glass extends Stuff {
     cm1.scene.add(this.mesh);
 
     this.setCannonBody();
+
+    this.cannonBody.addEventListener("collide", playSound);
+
+    const sound = sounds[this.type];
+    function playSound(e) {
+      const strength = e.contact.getImpactVelocityAlongNormal();
+      if (strength > 5) {
+        sound.currentTime = 0;
+        sound.play();
+      }
+    }
   }
 }
