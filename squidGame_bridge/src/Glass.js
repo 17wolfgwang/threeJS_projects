@@ -44,7 +44,7 @@ export class Glass extends Stuff {
     const sound = sounds[this.type];
     function playSound(e) {
       const strength = e.contact.getImpactVelocityAlongNormal();
-      if (strength > 5) {
+      if (strength > 5 && strength < 10) {
         sound.currentTime = 0;
         sound.play();
       }

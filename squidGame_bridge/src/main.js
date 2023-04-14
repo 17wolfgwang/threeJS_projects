@@ -9,6 +9,7 @@ import { Bar } from "./Bar";
 import { SideLight } from "./SideLight";
 import { Glass } from "./Glass";
 import { Player } from "./Player";
+import { PreventDragClick } from "./PreventDragClick";
 
 // ----- 주제: The Bridge 게임 만들기
 
@@ -230,7 +231,7 @@ for (let i = 0; i < numberOfGlass; i++) {
 const player = new Player({
   name: "player",
   x: 0,
-  y: 10.9,
+  y: 11,
   z: 13,
   rotationY: Math.PI,
   cannonMaterial: cm1.playerMaterial,
@@ -336,8 +337,6 @@ function draw() {
   objects.forEach((item) => {
     if (item.cannonBody) {
       if (item.name === "player") {
-        item.mesh.position.copy(item.cannonBody.position);
-        if (fail) item.mesh.quaternion.copy(item.cannonBody.quaternion);
         if (item.modelMesh) {
           item.modelMesh.position.copy(item.cannonBody.position);
           if (fail) item.modelMesh.quaternion.copy(item.cannonBody.quaternion);
@@ -376,8 +375,10 @@ function setSize() {
 }
 
 // 이벤트
+const preventDragClick = new PreventDragClick(canvas);
 window.addEventListener("resize", setSize);
 canvas.addEventListener("click", (e) => {
+  if (preventDragClick.mouseMoved) return;
   mouse.x = (e.clientX / canvas.clientWidth) * 2 - 1;
   mouse.y = -((e.clientY / canvas.clientHeight) * 2 - 1);
   checkIntersects();
